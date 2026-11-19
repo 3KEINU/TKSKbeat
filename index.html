@@ -7,7 +7,7 @@
     <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
     <meta name="description" content="触るだけで曲ができる、ブラウザ向け音楽トイ TKSKbeat">
     <title>TKSKbeat</title>
-    <link rel="stylesheet" href="./styles-r19.css">
+    <link rel="stylesheet" href="./styles-r20.css">
   </head>
   <body>
     <main class="shell" aria-labelledby="app-title">
@@ -87,7 +87,7 @@
 
       <footer>
         <span>TKSKBEAT / BPM 144 / 16 BARS</span>
-        <span>v2 • r19</span>
+        <span>v2 • r20</span>
       </footer>
     </main>
 
@@ -96,7 +96,10 @@
         <p class="eyebrow">YOUR BIRTHDAY BEAT</p>
         <h2 id="result-title">できた！</h2>
         <figure class="result-visual-frame">
-          <img id="result-visual" alt="">
+          <div class="result-visual-stage">
+            <img class="result-visual-background" id="result-visual-background" alt="" aria-hidden="true">
+            <img class="result-visual-character" id="result-visual" alt="">
+          </div>
           <figcaption id="result-visual-caption"></figcaption>
         </figure>
         <p id="result-copy">完成した16小節を再生してみよう。</p>
@@ -159,6 +162,6 @@
         }
       }, 1200);
     </script>
-    <script type="module" src="./js/app-r19.js"></script>
+    <script type="module" src="./js/app-r20.js"></script>
   </body>
 </html>
