@@ -43,6 +43,8 @@ const elements = {
   recIcon: document.querySelector("#rec-button .control-icon"),
   recLabel: document.querySelector("#rec-button .control-label"),
   titleSound: document.querySelector("#title-sound"),
+  creditButton: document.querySelector("#credit-button"),
+  creditsDialog: document.querySelector("#credits-dialog"),
   padGrid: document.querySelector("#pad-grid"),
   padCount: document.querySelector("#pad-count"),
   result: document.querySelector("#result"),
@@ -520,6 +522,10 @@ elements.titleSound.addEventListener("click", async () => {
     console.error(error);
     announce("TITLE AUDIO ERROR", 1200);
   }
+});
+elements.creditButton.addEventListener("click", () => elements.creditsDialog.showModal());
+elements.creditsDialog.addEventListener("click", (event) => {
+  if (event.target === elements.creditsDialog) elements.creditsDialog.close();
 });
 elements.resultPlay.addEventListener("click", togglePlayback);
 elements.copyLink.addEventListener("click", async () => {
