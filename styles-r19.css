@@ -226,7 +226,12 @@ h2 { margin-bottom: 0; font-size: .92rem; letter-spacing: .08em; }
   touch-action: manipulation;
 }
 .control[hidden] { display: none; }
-.control-icon { font-size: 1.05rem; }
+.control-icon {
+  font-family: "Segoe UI Symbol", "Apple Symbols", system-ui, sans-serif;
+  font-size: 1.05rem;
+  font-weight: 400;
+  line-height: 1;
+}
 .control-label { min-width: 0; font-size: clamp(.68rem, 3vw, .84rem); white-space: nowrap; }
 .control:active { transform: translateY(4px); box-shadow: none; }
 .control.play-toggle { background: var(--mint); }
