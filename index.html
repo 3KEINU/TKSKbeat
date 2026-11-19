@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+    <meta name="theme-color" content="#ffd942">
+    <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
+    <meta name="description" content="触るだけで曲ができる、TKSKbeatの技術プロトタイプ">
+    <title>TKSKbeat Prototype</title>
+    <link rel="stylesheet" href="./styles-r19.css">
+  </head>
+  <body>
+    <main class="shell" aria-labelledby="app-title">
+      <header class="brand-row">
+        <div>
+          <p class="eyebrow">BIRTHDAY BEAT MACHINE</p>
+          <h1 id="app-title"><button class="brand-sound" id="title-sound" type="button" aria-label="TKSKbeat タイトル音声を再生">TKSK<span>beat</span></button></h1>
+        </div>
+        <div class="speaker" aria-hidden="true"></div>
+      </header>
+
+      <section class="lcd" aria-live="polite" aria-atomic="true">
+        <canvas class="lcd-spectrum" id="lcd-spectrum" aria-hidden="true"></canvas>
+        <div class="lcd-character" id="lcd-character" aria-hidden="true">
+          <span class="eye"></span><span class="eye"></span><span class="mouth"></span>
+        </div>
+        <div class="lcd-copy">
+          <strong id="lcd-status">READY • PRESS PLAY</strong>
+          <span id="position-display">BAR 1 · STEP 01</span>
+        </div>
+        <div class="meter" aria-label="ループ位置"><i id="meter-fill"></i></div>
+      </section>
+
+      <section class="operation-panel panel" aria-label="再生・録音・画面切替">
+        <div class="operation-grid" id="operation-grid" data-active-tab="pico" data-recording="false">
+          <button class="control play-toggle" id="play-button" type="button" aria-label="再生">
+            <span class="control-icon" aria-hidden="true">▶</span><span class="control-label">再生</span>
+          </button>
+          <button class="control rec" id="rec-button" type="button" aria-pressed="false" hidden>
+            <span class="control-icon" aria-hidden="true">●</span><span class="control-label">録音</span>
+          </button>
+          <nav class="view-toggle" role="tablist" aria-label="画面を選ぶ">
+            <button id="tab-pico" type="button" role="tab" data-tab="pico" aria-controls="pico-panel" aria-selected="true">ビート</button>
+            <button id="tab-voice" type="button" role="tab" data-tab="voice" aria-controls="voice-panel" aria-selected="false" tabindex="-1">ボイス</button>
+          </nav>
+        </div>
+      </section>
+
+      <section class="tab-panel" id="pico-panel" role="tabpanel" aria-labelledby="tab-pico">
+        <p class="tab-lead">再生しながら、好きな音を選んでね！</p>
+        <section class="preset-panel panel" aria-labelledby="preset-heading">
+          <div class="section-heading">
+            <h2 id="preset-heading">ピコピコをえらぶ</h2>
+            <small>次の小節から切り替わります</small>
+          </div>
+          <div class="preset-grid">
+            <label>メロディ<select id="lead-pattern"></select></label>
+            <label>コード<select id="chord-pattern"></select></label>
+            <label>ベース<select id="bass-pattern"></select></label>
+            <label>ドラム<select id="drum-pattern"></select></label>
+            <label>ピコピコ<select id="arp-pattern"></select></label>
+          </div>
+        </section>
+      </section>
+
+      <section class="tab-panel" id="voice-panel" role="tabpanel" aria-labelledby="tab-voice" hidden>
+        <div class="record-mode segmented" aria-label="録音方法">
+          <button type="button" data-record-mode="overdub" aria-pressed="true">つぎたし</button>
+          <button type="button" data-record-mode="overwrite" aria-pressed="false">やり直し</button>
+        </div>
+
+        <p class="tab-lead">好きなボイスを曲に合わせて録音してね！</p>
+
+        <section class="pad-panel panel" aria-labelledby="pad-heading">
+          <div class="section-heading">
+            <h2 id="pad-heading">VOICE PADS</h2>
+            <small><span id="pad-count">0</span> / 256</small>
+          </div>
+          <div class="pad-grid" id="pad-grid"></div>
+        </section>
+
+      </section>
+
+      <section class="finish-panel" aria-label="完成">
+        <button class="control finish" id="finish-button" type="button">★<span>できた！</span></button>
+      </section>
+
+      <footer>
+        <span>PROTOTYPE / BPM 144 / 16 BARS</span>
+        <span>v2 • r19</span>
+      </footer>
+    </main>
+
+    <section class="result" id="result" hidden aria-labelledby="result-title">
+      <div class="result-card">
+        <p class="eyebrow">YOUR BIRTHDAY BEAT</p>
+        <h2 id="result-title">できた！</h2>
+        <figure class="result-visual-frame">
+          <img id="result-visual" alt="">
+          <figcaption id="result-visual-caption"></figcaption>
+        </figure>
+        <p id="result-copy">完成した16小節を再生してみよう。</p>
+        <div class="result-actions">
+          <button id="result-play" type="button">▶ PLAY</button>
+          <button id="copy-link" type="button">COPY LINK</button>
+          <button class="back-edit" id="back-to-edit" type="button">← もどってなおす</button>
+          <button id="new-beat" type="button">NEW BEAT</button>
+        </div>
+      </div>
+    </section>
+
+    <script>
+      window.setTimeout(() => {
+        if (document.documentElement.dataset.appReady === "true") return;
+        const status = document.querySelector("#lcd-status");
+        if (status) {
+          status.textContent = window.location.protocol === "file:"
+            ? "OPEN VIA LOCAL SERVER • npm run serve"
+            : "APP LOAD ERROR • RELOAD";
+        }
+      }, 1200);
+    </script>
+    <script type="module" src="./js/app-r19.js"></script>
+  </body>
+</html>
