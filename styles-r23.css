@@ -364,7 +364,7 @@ button:disabled, select:disabled { opacity: .45; cursor: not-allowed; }
 .result-actions button { min-height: 48px; border: 3px solid var(--ink); border-radius: 2px; background: white; box-shadow: 0 4px 0 var(--ink); font-weight: 900; }
 .result-actions button[hidden] { display: none; }
 .result-actions button:first-child { background: var(--mint); }
-.result-actions .share-image-test { background: var(--blue); color: white; }
+.result-actions .share-image { background: var(--blue); color: white; }
 .result-actions .back-edit { background: #fff0b7; }
 
 .sound-editor {

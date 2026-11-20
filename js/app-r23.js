@@ -68,7 +68,6 @@ const hashParams = new URLSearchParams(window.location.hash.replace(/^#/, ""));
 const hasSharedState = hashParams.has("s");
 const loadedState = readMusicStateFromHash();
 const openedFromShare = Boolean(loadedState);
-const shareTestEnabled = new URLSearchParams(window.location.search).get("sharetest") === "1";
 const SHARE_TEXT = "TKSKbeatでバースデービートを作ったよ！\n#TKSKbeat";
 let musicState = loadedState ?? createInitialMusicState();
 let activeTrackPatterns = { ...musicState.trackPatterns };
@@ -259,10 +258,9 @@ function render() {
   elements.lcdStatus.textContent = lcdMessage;
   elements.result.hidden = !finished;
   elements.backToEdit.hidden = openedFromShare;
-  elements.shareImage.hidden = !shareTestEnabled;
   if (finished) {
     renderResultVisual();
-    if (shareTestEnabled) ensureShareFile().catch((error) => console.error(error));
+    ensureShareFile().catch((error) => console.error(error));
   }
   elements.resultPlay.textContent = playing ? "■ STOP" : "▶ PLAY";
   document.querySelectorAll("[data-record-mode]").forEach((button) => {
@@ -435,9 +433,7 @@ function returnToEditing() {
 }
 
 function publicShareUrl() {
-  const url = new URL(buildShareUrl(musicState));
-  url.searchParams.delete("sharetest");
-  return url.toString();
+  return buildShareUrl(musicState);
 }
 
 function downloadFile(file) {
