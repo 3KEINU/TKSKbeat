@@ -7,7 +7,7 @@
     <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
     <meta name="description" content="触るだけで曲ができる、ブラウザ向け音楽トイ TKSKbeat">
     <title>TKSKbeat</title>
-    <link rel="stylesheet" href="./styles-r21.css">
+    <link rel="stylesheet" href="./styles-r22.css">
   </head>
   <body>
     <main class="shell" aria-labelledby="app-title">
@@ -26,7 +26,7 @@
         </div>
         <div class="lcd-copy">
           <strong id="lcd-status">READY • PRESS PLAY</strong>
-          <span id="position-display">BAR 1 · STEP 01</span>
+          <span id="position-display" aria-hidden="true"></span>
         </div>
         <div class="meter" aria-label="ループ位置"><i id="meter-fill"></i></div>
       </section>
@@ -50,8 +50,7 @@
         <p class="tab-lead">再生しながら、好きな音を選んでね！</p>
         <section class="preset-panel panel" aria-labelledby="preset-heading">
           <div class="section-heading">
-            <h2 id="preset-heading">ピコピコをえらぶ</h2>
-            <small>次の小節から切り替わります</small>
+            <h2 id="preset-heading">ビートをえらぶ</h2>
           </div>
           <div class="preset-grid">
             <label>メロディ<select id="lead-pattern"></select></label>
@@ -87,21 +86,19 @@
 
       <footer>
         <span>TKSKBEAT / BPM 144 / 16 BARS</span>
-        <span>v2 • r21</span>
+        <span>v2 • r22</span>
       </footer>
     </main>
 
-    <section class="result" id="result" hidden aria-labelledby="result-title">
+    <section class="result" id="result" hidden aria-label="完成したビート">
       <div class="result-card">
         <p class="eyebrow">YOUR BIRTHDAY BEAT</p>
-        <h2 id="result-title">できた！</h2>
         <figure class="result-visual-frame">
           <div class="result-visual-stage">
             <img class="result-visual-background" id="result-visual-background" alt="" aria-hidden="true">
             <img class="result-visual-character" id="result-visual" alt="">
             <img class="result-visual-sticker" id="result-visual-sticker" alt="">
           </div>
-          <figcaption id="result-visual-caption"></figcaption>
         </figure>
         <p id="result-copy">完成した16小節を再生してみよう。</p>
         <div class="result-actions">
@@ -163,6 +160,6 @@
         }
       }, 1200);
     </script>
-    <script type="module" src="./js/app-r21.js"></script>
+    <script type="module" src="./js/app-r22.js"></script>
   </body>
 </html>

@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="theme-color" content="#ffd942">
+    <title>TKSKbeat 画像共有テスト</title>
+    <link rel="stylesheet" href="./share-test-r22.css">
+  </head>
+  <body>
+    <main class="share-test-shell">
+      <p class="eyebrow">TKSKbeat / TECHNOLOGY TEST</p>
+      <h1>画像付き共有テスト</h1>
+      <p class="intro">本番UIとは独立した検証ページです。iPhone Safariの共有シートからXを選び、画像・文章・URLが渡るか確認してください。</p>
+
+      <section class="test-panel" aria-label="ジャケット設定">
+        <div class="test-selects">
+          <label>メロディ<select id="test-lead"></select></label>
+          <label>コード<select id="test-chord"></select></label>
+          <label>ベース<select id="test-bass"></select></label>
+        </div>
+        <label class="url-label">共有URL<input id="test-share-url" type="url" inputmode="url"></label>
+      </section>
+
+      <figure class="test-jacket">
+        <canvas id="test-canvas" width="2048" height="2048" aria-label="生成されるジャケット画像"></canvas>
+      </figure>
+
+      <div class="test-actions">
+        <button id="test-share" type="button">画像付きで共有</button>
+        <button id="test-download" type="button">PNGを保存</button>
+        <button id="test-copy-url" type="button">URLをコピー</button>
+      </div>
+      <p class="test-status" id="test-status" role="status">準備中…</p>
+      <p class="test-note">X側で画像または文章が欠ける場合は、PNG保存＋URLコピーを代替手段として使用できます。</p>
+    </main>
+    <script type="module" src="./js/share-test-r22.js"></script>
+  </body>
+</html>
