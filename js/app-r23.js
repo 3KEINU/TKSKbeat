@@ -463,7 +463,7 @@ async function shareJacketImage() {
   try {
     const file = await ensureShareFile();
     const url = publicShareUrl();
-    const shareData = { files: [file], text: SHARE_TEXT, url };
+    const shareData = { files: [file], text: `${SHARE_TEXT}\n${url}` };
     if (navigator.share && navigator.canShare?.({ files: shareData.files })) {
       elements.shareImage.textContent = "共有先を選んでね";
       await navigator.share(shareData);
