@@ -7,7 +7,7 @@
     <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
     <meta name="description" content="触るだけで曲ができる、ブラウザ向け音楽トイ TKSKbeat">
     <title>TKSKbeat</title>
-    <link rel="stylesheet" href="./styles-r22.css">
+    <link rel="stylesheet" href="./styles-r23.css">
   </head>
   <body>
     <main class="shell" aria-labelledby="app-title">
@@ -86,7 +86,7 @@
 
       <footer>
         <span>TKSKBEAT / BPM 144 / 16 BARS</span>
-        <span>v2 • r22</span>
+        <span>v2 • r23</span>
       </footer>
     </main>
 
@@ -94,16 +94,13 @@
       <div class="result-card">
         <p class="eyebrow">YOUR BIRTHDAY BEAT</p>
         <figure class="result-visual-frame">
-          <div class="result-visual-stage">
-            <img class="result-visual-background" id="result-visual-background" alt="" aria-hidden="true">
-            <img class="result-visual-character" id="result-visual" alt="">
-            <img class="result-visual-sticker" id="result-visual-sticker" alt="">
-          </div>
+          <div class="result-visual-stage" id="result-visual-stage"></div>
         </figure>
         <p id="result-copy">完成した16小節を再生してみよう。</p>
         <div class="result-actions">
           <button id="result-play" type="button">▶ PLAY</button>
           <button id="copy-link" type="button">COPY LINK</button>
+          <button class="share-image-test" id="share-image" type="button" hidden>画像付き共有を試す</button>
           <button class="back-edit" id="back-to-edit" type="button">← もどってなおす</button>
           <button id="new-beat" type="button">NEW BEAT</button>
         </div>
@@ -160,6 +157,6 @@
         }
       }, 1200);
     </script>
-    <script type="module" src="./js/app-r22.js"></script>
+    <script type="module" src="./js/app-r23.js"></script>
   </body>
 </html>
