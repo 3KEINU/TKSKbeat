@@ -52,23 +52,27 @@ const elements = {
   padGrid: document.querySelector("#pad-grid"),
   padCount: document.querySelector("#pad-count"),
   result: document.querySelector("#result"),
-  resultCopy: document.querySelector("#result-copy"),
+  resultError: document.querySelector("#result-error"),
   resultVisualStage: document.querySelector("#result-visual-stage"),
   resultPlay: document.querySelector("#result-play"),
-  copyLink: document.querySelector("#copy-link"),
+  resultPlayIcon: document.querySelector("#result-play-icon"),
+  resultPlayLabel: document.querySelector("#result-play-label"),
   shareImage: document.querySelector("#share-image"),
   backToEdit: document.querySelector("#back-to-edit"),
   newBeat: document.querySelector("#new-beat"),
   tabs: [...document.querySelectorAll("[data-tab]")],
   tabPanels: [...document.querySelectorAll("[role='tabpanel']")],
-  trackPatterns: Object.fromEntries(TRACK_PARTS.map((part) => [part, document.querySelector(`#${part}-pattern`)]))
+  trackPatternGroups: Object.fromEntries(TRACK_PARTS.map((part) => [
+    part,
+    document.querySelector(`[data-track-part="${part}"] .track-pattern-buttons`)
+  ]))
 };
 
 const hashParams = new URLSearchParams(window.location.hash.replace(/^#/, ""));
 const hasSharedState = hashParams.has("s");
 const loadedState = readMusicStateFromHash();
 const openedFromShare = Boolean(loadedState);
-const SHARE_TEXT = "TKSKbeatでバースデービートを作ったよ！\n#TKSKbeat";
+const SHARE_TEXT = "陽菜ちゃん、お誕生日おめでとう！\nピコピコ鳴るやつ作ってみた！\n\n#TKSKbeat\n#高咲陽菜生誕祭2026";
 let musicState = loadedState ?? createInitialMusicState();
 let activeTrackPatterns = { ...musicState.trackPatterns };
 let finished = Boolean(loadedState);
@@ -238,10 +242,23 @@ function updatePosition(step) {
 }
 
 function renderTrackPatterns() {
-  for (const [part, select] of Object.entries(elements.trackPatterns)) {
-    select.value = musicState.trackPatterns[part];
-    select.disabled = finished;
+  for (const [part, group] of Object.entries(elements.trackPatternGroups)) {
+    for (const button of group.querySelectorAll(".track-pattern-button")) {
+      const selected = button.dataset.patternId === musicState.trackPatterns[part];
+      button.setAttribute("aria-pressed", String(selected));
+      button.disabled = finished;
+    }
   }
+}
+
+function clearResultError() {
+  elements.resultError.hidden = true;
+  elements.resultError.textContent = "";
+}
+
+function showResultError(message) {
+  elements.resultError.textContent = message;
+  elements.resultError.hidden = false;
 }
 
 function renderResultVisual() {
@@ -278,7 +295,9 @@ function render() {
     renderResultVisual();
     ensureShareFile().catch((error) => console.error(error));
   }
-  elements.resultPlay.textContent = playing ? "■ STOP" : "▶ PLAY";
+  elements.resultPlayIcon.textContent = playing ? "■" : "▶";
+  elements.resultPlayLabel.textContent = playing ? "STOP" : "PLAY";
+  elements.resultPlay.setAttribute("aria-label", playing ? "完成したビートを停止" : "完成したビートを再生");
   document.querySelectorAll("[data-record-mode]").forEach((button) => {
     button.setAttribute("aria-pressed", String(button.dataset.recordMode === recordMode));
     button.disabled = finished || recording || countingIn;
@@ -386,6 +405,7 @@ async function toggleRecording() {
 
 async function startPlayback() {
   try {
+    if (finished) clearResultError();
     announce("LOADING AUDIO...", 0);
     activeTrackPatterns = { ...musicState.trackPatterns };
     await engine.play();
@@ -395,6 +415,7 @@ async function startPlayback() {
     render();
   } catch (error) {
     console.error(error);
+    if (finished) showResultError("再生できませんでした。もう一度お試しください。");
     announce("AUDIO ERROR • TAP PLAY AGAIN", 0);
   }
 }
@@ -426,15 +447,14 @@ function finishBeat() {
   finished = true;
   const shareUrl = buildShareUrl(musicState);
   window.history.replaceState(null, "", shareUrl);
-  elements.resultCopy.textContent = playing
-    ? "編集をロックしました。曲はそのまま再生中！"
-    : "完成した16小節を再生してみよう。";
+  clearResultError();
   announce("FINISHED!", 0);
   render();
 }
 
 function returnToEditing() {
   if (!finished || openedFromShare) return;
+  clearResultError();
   finished = false;
   const url = new URL(window.location.href);
   url.hash = "";
@@ -474,6 +494,7 @@ async function copyShareFallback(text, url) {
 
 async function shareJacketImage() {
   const originalLabel = elements.shareImage.textContent;
+  clearResultError();
   elements.shareImage.disabled = true;
   elements.shareImage.textContent = "PNG生成中…";
   try {
@@ -483,18 +504,14 @@ async function shareJacketImage() {
     if (navigator.share && navigator.canShare?.({ files: shareData.files })) {
       elements.shareImage.textContent = "共有先を選んでね";
       await navigator.share(shareData);
-      elements.resultCopy.textContent = "ジャケット・文章・URLを共有画面へ渡しました。";
       return;
     }
     downloadFile(file);
     await copyShareFallback(SHARE_TEXT, url);
-    elements.resultCopy.textContent = "画像を保存し、投稿文とURLをコピーしました。";
   } catch (error) {
-    if (error?.name === "AbortError") {
-      elements.resultCopy.textContent = "共有をキャンセルしました。";
-    } else {
+    if (error?.name !== "AbortError") {
       console.error(error);
-      elements.resultCopy.textContent = `共有エラー: ${error?.message ?? "もう一度お試しください"}`;
+      showResultError(`共有できませんでした: ${error?.message ?? "もう一度お試しください"}`);
     }
   } finally {
     elements.shareImage.disabled = false;
@@ -538,21 +555,27 @@ function createControls() {
   });
 }
 
-function createTrackPatternOptions() {
-  for (const [part, select] of Object.entries(elements.trackPatterns)) {
-    for (const preset of MIDI_PATTERN_OPTIONS) {
-      const option = document.createElement("option");
-      option.value = preset.id;
-      option.textContent = preset.label;
-      select.append(option);
-    }
-    select.addEventListener("change", (event) => {
-      const nextPattern = event.target.value;
-      if (nextPattern === musicState.trackPatterns[part]) return;
-      musicState = { ...musicState, trackPatterns: { ...musicState.trackPatterns, [part]: nextPattern } };
-      if (!playing) activeTrackPatterns = { ...musicState.trackPatterns };
-      transitionGuide({ type: "track-changed" });
-      render();
+function selectTrackPattern(part, nextPattern) {
+  if (nextPattern === musicState.trackPatterns[part]) return;
+  musicState = { ...musicState, trackPatterns: { ...musicState.trackPatterns, [part]: nextPattern } };
+  if (!playing) activeTrackPatterns = { ...musicState.trackPatterns };
+  transitionGuide({ type: "track-changed" });
+  render();
+}
+
+function createTrackPatternControls() {
+  for (const [part, group] of Object.entries(elements.trackPatternGroups)) {
+    const trackLabel = group.closest(".track-pattern-row")?.querySelector(".track-pattern-name")?.textContent?.trim() ?? part;
+    MIDI_PATTERN_OPTIONS.forEach((preset, index) => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = `track-pattern-button pattern-${index + 1}`;
+      button.dataset.patternId = preset.id;
+      button.setAttribute("aria-label", `${trackLabel} ${index + 1}`);
+      button.setAttribute("aria-pressed", "false");
+      button.textContent = String(index + 1);
+      button.addEventListener("click", () => selectTrackPattern(part, preset.id));
+      group.append(button);
     });
   }
 }
@@ -598,15 +621,6 @@ elements.creditsDialog.addEventListener("click", (event) => {
 });
 elements.resultPlay.addEventListener("click", togglePlayback);
 elements.shareImage.addEventListener("click", shareJacketImage);
-elements.copyLink.addEventListener("click", async () => {
-  const url = buildShareUrl(musicState);
-  try {
-    await navigator.clipboard.writeText(url);
-    elements.copyLink.textContent = "COPIED!";
-  } catch {
-    window.prompt("このURLをコピーしてください", url);
-  }
-});
 elements.backToEdit.addEventListener("click", returnToEditing);
 elements.newBeat.addEventListener("click", () => {
   const url = new URL(window.location.href);
@@ -625,7 +639,7 @@ window.addEventListener("pagehide", (event) => {
 });
 window.addEventListener("pageshow", () => spectrumAnalyzer.setActive(!document.hidden));
 
-createTrackPatternOptions();
+createTrackPatternControls();
 createControls();
 soundEditor = initializeSoundEditor({ engine, announce });
 switchTab("pico");

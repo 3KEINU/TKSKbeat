@@ -16,7 +16,10 @@
           <p class="eyebrow">BIRTHDAY BEAT MACHINE</p>
           <h1 id="app-title"><button class="brand-sound" id="title-sound" type="button" aria-label="TKSKbeat タイトル音声を再生">TKSK<span>beat</span></button></h1>
         </div>
-        <button class="credit-button" id="credit-button" type="button" aria-haspopup="dialog" aria-controls="credits-dialog">CREDIT</button>
+        <div class="header-actions">
+          <button class="new-beat-button" id="new-beat" type="button">NEW BEAT</button>
+          <button class="credit-button" id="credit-button" type="button" aria-haspopup="dialog" aria-controls="credits-dialog">CREDIT</button>
+        </div>
       </header>
 
       <section class="lcd" aria-live="polite" aria-atomic="true">
@@ -52,12 +55,27 @@
           <div class="section-heading">
             <h2 id="preset-heading">ビートをえらぶ</h2>
           </div>
-          <div class="preset-grid">
-            <label>メロディ<select id="lead-pattern"></select></label>
-            <label>コード<select id="chord-pattern"></select></label>
-            <label>ベース<select id="bass-pattern"></select></label>
-            <label>ドラム<select id="drum-pattern"></select></label>
-            <label>ピコピコ<select id="arp-pattern"></select></label>
+          <div class="preset-grid" id="track-pattern-controls">
+            <div class="track-pattern-row" data-track-part="lead">
+              <span class="track-pattern-name" id="lead-pattern-label">メロディ</span>
+              <div class="track-pattern-buttons" role="group" aria-labelledby="lead-pattern-label"></div>
+            </div>
+            <div class="track-pattern-row" data-track-part="chord">
+              <span class="track-pattern-name" id="chord-pattern-label">コード</span>
+              <div class="track-pattern-buttons" role="group" aria-labelledby="chord-pattern-label"></div>
+            </div>
+            <div class="track-pattern-row" data-track-part="bass">
+              <span class="track-pattern-name" id="bass-pattern-label">ベース</span>
+              <div class="track-pattern-buttons" role="group" aria-labelledby="bass-pattern-label"></div>
+            </div>
+            <div class="track-pattern-row" data-track-part="drum">
+              <span class="track-pattern-name" id="drum-pattern-label">ドラム</span>
+              <div class="track-pattern-buttons" role="group" aria-labelledby="drum-pattern-label"></div>
+            </div>
+            <div class="track-pattern-row" data-track-part="arp">
+              <span class="track-pattern-name" id="arp-pattern-label">ピコピコ</span>
+              <div class="track-pattern-buttons" role="group" aria-labelledby="arp-pattern-label"></div>
+            </div>
           </div>
         </section>
       </section>
@@ -92,17 +110,17 @@
 
     <section class="result" id="result" hidden aria-label="完成したビート">
       <div class="result-card">
-        <p class="eyebrow">YOUR BIRTHDAY BEAT</p>
         <figure class="result-visual-frame">
           <div class="result-visual-stage" id="result-visual-stage"></div>
         </figure>
-        <p id="result-copy">完成した16小節を再生してみよう。</p>
+        <p class="result-error" id="result-error" role="alert" hidden></p>
         <div class="result-actions">
-          <button id="result-play" type="button">▶ PLAY</button>
-          <button id="copy-link" type="button">COPY LINK</button>
+          <button id="result-play" type="button" aria-label="完成したビートを再生">
+            <span class="result-play-icon" id="result-play-icon" aria-hidden="true">▶</span>
+            <span id="result-play-label">PLAY</span>
+          </button>
           <button class="share-image" id="share-image" type="button">画像付きでシェア</button>
           <button class="back-edit" id="back-to-edit" type="button">← もどってなおす</button>
-          <button id="new-beat" type="button">NEW BEAT</button>
         </div>
       </div>
     </section>
