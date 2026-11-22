@@ -62,6 +62,8 @@ button { color: inherit; }
   padding: 4px 6px 12px;
 }
 
+.brand-lockup { flex: 1 1 auto; min-width: 0; }
+
 .header-actions {
   display: flex;
   flex: 0 0 auto;
@@ -77,8 +79,8 @@ button { color: inherit; }
 
 h1, h2, p { margin-top: 0; }
 h1 { margin-bottom: 0; font-size: clamp(2rem, 9vw, 3.5rem); line-height: .92; letter-spacing: -.08em; }
-h1 span { color: var(--pink); }
-.brand-sound { appearance: none; padding: 0; border: 0; background: transparent; font: inherit; line-height: inherit; letter-spacing: inherit; cursor: pointer; touch-action: manipulation; }
+.brand-sound { appearance: none; display: block; max-width: 100%; padding: 0; border: 0; background: transparent; font: inherit; line-height: inherit; letter-spacing: inherit; cursor: pointer; touch-action: manipulation; }
+.brand-logo { display: block; width: min(340px, 100%); height: auto; }
 .brand-sound:active { transform: translateY(2px) scale(.98); }
 h2 { margin-bottom: 0; font-size: .92rem; letter-spacing: .08em; }
 
