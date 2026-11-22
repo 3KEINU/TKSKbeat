@@ -163,8 +163,8 @@ h2 { margin-bottom: 0; font-size: .92rem; letter-spacing: .08em; }
 @keyframes bop { 50% { transform: translateY(-8px) rotate(-4deg) scale(1.05); } }
 
 .lcd-copy { position: relative; z-index: 2; display: flex; flex-direction: column; justify-content: center; min-width: 0; padding-block: 2px; }
-.lcd-copy strong { display: block; min-height: 1.45em; padding-block: .06em; font-family: "TKSKbeat Symbols", var(--ui-font); font-size: clamp(.68rem, 3.3vw, 1rem); line-height: 1.4; letter-spacing: -.02em; white-space: nowrap; }
-.lcd-copy span { display: block; min-height: 1.45em; padding-block: .06em; font-size: clamp(.56rem, 2.55vw, .78rem); font-weight: 900; line-height: 1.4; letter-spacing: -.03em; white-space: nowrap; overflow: hidden; }
+.lcd-copy strong { display: block; min-height: 1.45em; padding-block: .06em; font-family: "TKSKbeat Symbols", var(--ui-font); font-size: clamp(.74rem, 3.6vw, 1.1rem); line-height: 1.4; letter-spacing: -.02em; white-space: nowrap; }
+.lcd-copy span { display: block; min-height: 1.45em; padding-block: .06em; font-size: clamp(.62rem, 2.8vw, .86rem); font-weight: 900; line-height: 1.4; letter-spacing: -.03em; white-space: nowrap; overflow: hidden; }
 
 .meter { position: absolute; z-index: 3; left: 0; right: 0; bottom: 0; height: 9px; border-top: 3px solid var(--ink); background: rgba(255,255,255,.28); }
 .meter i { display: block; width: 0; height: 100%; background: var(--lcd-ink); transition: width 80ms linear; }
