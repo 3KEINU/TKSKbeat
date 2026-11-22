@@ -164,7 +164,7 @@ h2 { margin-bottom: 0; font-size: .92rem; letter-spacing: .08em; }
 
 .lcd-copy { position: relative; z-index: 2; display: flex; flex-direction: column; justify-content: center; min-width: 0; padding-block: 2px; }
 .lcd-copy strong { display: block; min-height: 1.45em; padding-block: .06em; font-family: "TKSKbeat Symbols", var(--ui-font); font-size: clamp(.68rem, 3.3vw, 1rem); line-height: 1.4; letter-spacing: -.02em; white-space: nowrap; }
-.lcd-copy span { display: none; }
+.lcd-copy span { display: block; min-height: 1.45em; padding-block: .06em; font-size: clamp(.56rem, 2.55vw, .78rem); font-weight: 900; line-height: 1.4; letter-spacing: -.03em; white-space: nowrap; overflow: hidden; }
 
 .meter { position: absolute; z-index: 3; left: 0; right: 0; bottom: 0; height: 9px; border-top: 3px solid var(--ink); background: rgba(255,255,255,.28); }
 .meter i { display: block; width: 0; height: 100%; background: var(--lcd-ink); transition: width 80ms linear; }
@@ -427,6 +427,7 @@ button:disabled, select:disabled { opacity: .45; cursor: not-allowed; }
 .result-actions button:first-child { background: var(--mint); }
 .result-actions .share-image { background: var(--blue); color: white; }
 .result-actions .back-edit { background: #fff0b7; }
+.result-actions .create-own-beat { background: var(--pink); color: white; }
 .result-play-icon { display: inline-block; min-width: 1.25em; margin-right: .2em; font-family: "TKSKbeat Symbols", system-ui, sans-serif; font-weight: 400; }
 .result-error { margin: 0 0 12px; padding: 10px; border: 3px solid var(--ink); background: #ffd5c8; color: #8c102c; font-size: .72rem; font-weight: 900; line-height: 1.5; }
 .result-error[hidden] { display: none; }

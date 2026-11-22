@@ -106,11 +106,12 @@ export function stepsUntilNextPartOnset(pattern, part, step) {
 }
 
 export class AudioEngine {
-  constructor({ getMusicState, onStep, onBarBoundary, onAnalyserReady, audioSettings, partSoundSettings }) {
+  constructor({ getMusicState, onStep, onBarBoundary, onAnalyserReady, onRecordedPadPlayback, audioSettings, partSoundSettings }) {
     this.getMusicState = getMusicState;
     this.onStep = onStep;
     this.onBarBoundary = onBarBoundary;
     this.onAnalyserReady = onAnalyserReady;
+    this.onRecordedPadPlayback = onRecordedPadPlayback;
     this.context = null;
     this.master = null;
     this.compressor = null;
@@ -729,8 +730,13 @@ export class AudioEngine {
   }
 
   scheduleRecordedEvents(step, time, state) {
+    const delay = Math.max(0, (time - this.context.currentTime) * 1000);
     for (const event of state.padEvents) {
-      if (event.step === step) this.playPad(event.padId, time);
+      if (event.step !== step) continue;
+      this.playPad(event.padId, time);
+      window.setTimeout(() => {
+        if (this.playing) this.onRecordedPadPlayback?.(event.padId);
+      }, delay);
     }
   }
 

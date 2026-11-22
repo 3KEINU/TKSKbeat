@@ -36,6 +36,7 @@ const elements = {
   body: document.body,
   spectrum: document.querySelector("#lcd-spectrum"),
   lcdStatus: document.querySelector("#lcd-status"),
+  lcdPadMessage: document.querySelector("#lcd-pad-message"),
   lcdCharacter: document.querySelector("#lcd-character"),
   meter: document.querySelector("#meter-fill"),
   play: document.querySelector("#play-button"),
@@ -59,6 +60,7 @@ const elements = {
   resultPlayLabel: document.querySelector("#result-play-label"),
   shareImage: document.querySelector("#share-image"),
   backToEdit: document.querySelector("#back-to-edit"),
+  createOwnBeat: document.querySelector("#create-own-beat"),
   newBeat: document.querySelector("#new-beat"),
   tabs: [...document.querySelectorAll("[data-tab]")],
   tabPanels: [...document.querySelectorAll("[role='tabpanel']")],
@@ -73,6 +75,20 @@ const hasSharedState = hashParams.has("s");
 const loadedState = readMusicStateFromHash();
 const openedFromShare = Boolean(loadedState);
 const SHARE_TEXT = "陽菜ちゃん、お誕生日おめでとう！\nピコピコ鳴るやつ作ってみた！\n\n#TKSKbeat\n#高咲陽菜生誕祭2026";
+const PAD_DISPLAY_TEXT = Object.freeze([
+  "やればできるぞー！",
+  "ひな鳥どりーむ！",
+  "ﾀｶﾀｶﾀｶﾀｶ",
+  "ﾀｶｻｷﾁｬﾝ!!",
+  "今日も元気にやってまーす！",
+  "ひなちゃんこと",
+  "高咲陽菜でーす！",
+  "おかーさーーん！",
+  "どん！",
+  "たっ！",
+  "ちっ！",
+  "しゃーん！"
+]);
 let musicState = loadedState ?? createInitialMusicState();
 let activeTrackPatterns = { ...musicState.trackPatterns };
 let finished = Boolean(loadedState);
@@ -101,12 +117,18 @@ const engine = new AudioEngine({
   getMusicState: () => ({ ...musicState, trackPatterns: activeTrackPatterns }),
   partSoundSettings: createDefaultSoundSettings(),
   onAnalyserReady: (analyser) => spectrumAnalyzer.attach(analyser),
+  onRecordedPadPlayback: showPadMessage,
   onStep: updatePosition,
   onBarBoundary: () => {
     activeTrackPatterns = { ...musicState.trackPatterns };
     renderTrackPatterns();
   }
 });
+
+function showPadMessage(padId) {
+  const message = PAD_DISPLAY_TEXT[padId];
+  if (message) elements.lcdPadMessage.textContent = message;
+}
 
 // Developer-only A/B controls. These do not add settings to the public UI.
 window.__TKSKBEAT_AUDIO_DEBUG__ = Object.freeze({
@@ -290,7 +312,9 @@ function render() {
   elements.padCount.textContent = musicState.padEvents.length;
   elements.lcdStatus.textContent = lcdMessage;
   elements.result.hidden = !finished;
+  elements.shareImage.hidden = openedFromShare;
   elements.backToEdit.hidden = openedFromShare;
+  elements.createOwnBeat.hidden = !openedFromShare;
   if (finished) {
     renderResultVisual();
     ensureShareFile().catch((error) => console.error(error));
@@ -535,6 +559,7 @@ function createControls() {
     button.addEventListener("pointerdown", async (event) => {
       if (finished) return;
       event.preventDefault();
+      showPadMessage(padId);
       button.setPointerCapture(event.pointerId);
       button.classList.add("active");
       bop();
@@ -622,11 +647,13 @@ elements.creditsDialog.addEventListener("click", (event) => {
 elements.resultPlay.addEventListener("click", togglePlayback);
 elements.shareImage.addEventListener("click", shareJacketImage);
 elements.backToEdit.addEventListener("click", returnToEditing);
-elements.newBeat.addEventListener("click", () => {
+function startNewBeat() {
   const url = new URL(window.location.href);
   url.hash = "";
   window.location.href = url.toString();
-});
+}
+elements.newBeat.addEventListener("click", startNewBeat);
+elements.createOwnBeat.addEventListener("click", startNewBeat);
 
 document.addEventListener("visibilitychange", () => {
   spectrumAnalyzer.setActive(!document.hidden);
