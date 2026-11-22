@@ -74,7 +74,7 @@ const hashParams = new URLSearchParams(window.location.hash.replace(/^#/, ""));
 const hasSharedState = hashParams.has("s");
 const loadedState = readMusicStateFromHash();
 const openedFromShare = Boolean(loadedState);
-const SHARE_TEXT = "陽菜ちゃん、お誕生日おめでとう！\nピコピコ鳴るやつ作ってみた！\n\n#TKSKbeat\n#高咲陽菜生誕祭2026";
+const SHARE_TEXT = "陽菜ちゃん、お誕生日おめでとう！\nピコピコ鳴るやつ作ってみた！\n\n#TKSKbeat\n#高咲陽菜生誕祭2026\n#ひなちゃん連絡帳";
 const PAD_DISPLAY_TEXT = Object.freeze([
   "やればできるぞー！",
   "ひな鳥どりーむ！",
