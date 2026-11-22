@@ -29,7 +29,7 @@ TKSKbeat は、高咲陽菜さんのお誕生日をお祝いするために作�
 - **Special Thanks:** きゃぷてん
 - **Illustration & Voice:** 3keinu Amberkey
 - **Planning & Production:** 3keinu Amberkey
-- **Fonts:** 使用フォント名・ライセンス表記を確認して追記予定
+- **Fonts:** ベストテンFONT（フロップデザイン 様）
 
 ## NOTICE
 
