@@ -89,6 +89,8 @@ let soundEditor = null;
 let shareFilePromise = null;
 let shareFilePatternKey = "";
 const VOICE_EXIT_DELAY_MS = 3000;
+const BEAT_FACE_DURATION_MS = 120;
+let beatFaceTimer = null;
 const spectrumAnalyzer = createSpectrumAnalyzer(elements.spectrum);
 
 const engine = new AudioEngine({
@@ -206,6 +208,18 @@ function announce(message, timeout = 1600) {
   }
 }
 
+function resetBeatFace() {
+  window.clearTimeout(beatFaceTimer);
+  beatFaceTimer = null;
+  elements.lcdCharacter.classList.remove("is-beat");
+}
+
+function pulseBeatFace() {
+  window.clearTimeout(beatFaceTimer);
+  elements.lcdCharacter.classList.add("is-beat");
+  beatFaceTimer = window.setTimeout(resetBeatFace, BEAT_FACE_DURATION_MS);
+}
+
 function bop() {
   elements.lcdCharacter.classList.remove("bop");
   requestAnimationFrame(() => elements.lcdCharacter.classList.add("bop"));
@@ -213,6 +227,8 @@ function bop() {
 
 function updatePosition(step) {
   lastPlaybackStep = step;
+  if (!engine.playing) resetBeatFace();
+  else if (step % 4 === 0) pulseBeatFace();
   if (recording && recordingLoopGuide) {
     const advanced = advanceRecordingLoopGuide(recordingLoopGuide, step, LOOP_STEPS);
     recordingLoopGuide = advanced.state;
