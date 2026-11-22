@@ -1,6 +1,44 @@
 const DEFAULT_PATTERN_ID = "midi-loop-1";
 const imageCache = new Map();
 
+const DRUM_STICKER_LAYOUTS_BY_CHORD = Object.freeze({
+  "midi-loop-1": Object.freeze({
+    "midi-loop-1": { mode: "placed", width: 0.19, left: 0.22, top: 0.025, rotate: -1 },
+    "midi-loop-2": { mode: "placed", width: 0.2, left: 0.22, top: 0.025, rotate: 0 },
+    "midi-loop-3": { mode: "placed", width: 0.33, left: 0.025, top: 0.025, rotate: -4 },
+    "midi-loop-4": { mode: "placed", width: 0.22, left: 0.22, top: 0.025, rotate: 1 },
+    "midi-loop-5": { mode: "placed", width: 0.25, left: 0.025, top: 0.025, rotate: -1 }
+  }),
+  "midi-loop-2": Object.freeze({
+    "midi-loop-1": { mode: "placed", width: 0.19, left: 0.025, top: 0.2, rotate: -1 },
+    "midi-loop-2": { mode: "placed", width: 0.2, left: 0.025, top: 0.2, rotate: 0 },
+    "midi-loop-3": { mode: "placed", width: 0.33, left: 0.025, top: 0.025, rotate: 2 },
+    "midi-loop-4": { mode: "placed", width: 0.245, left: 0.025, top: 0.025, rotate: 1 },
+    "midi-loop-5": { mode: "placed", width: 0.25, left: 0.025, top: 0.025, rotate: -1 }
+  }),
+  "midi-loop-3": Object.freeze({
+    "midi-loop-1": { mode: "placed", width: 0.19, left: 0.055, top: 0.055, rotate: -13 },
+    "midi-loop-2": { mode: "placed", width: 0.2, left: 0.055, top: 0.055, rotate: 0 },
+    "midi-loop-3": { mode: "placed", width: 0.33, left: 0.025, top: 0.025, rotate: -4 },
+    "midi-loop-4": { mode: "placed", width: 0.22, left: 0.025, top: 0.025, rotate: -5 },
+    "midi-loop-5": { mode: "placed", width: 0.25, left: 0.025, top: 0.025, rotate: -1 }
+  }),
+  "midi-loop-4": Object.freeze({
+    "midi-loop-1": { mode: "placed", width: 0.19, left: 0.055, top: 0.055, rotate: -7 },
+    "midi-loop-2": { mode: "placed", width: 0.2, left: 0.055, top: 0.055, rotate: 6 },
+    "midi-loop-3": { mode: "placed", width: 0.33, left: 0.025, top: 0.025, rotate: -4 },
+    "midi-loop-4": { mode: "placed", width: 0.22, left: 0.055, top: 0.055, rotate: -11 },
+    "midi-loop-5": { mode: "placed", width: 0.25, left: 0.025, top: 0.025, rotate: -1 }
+  }),
+  "midi-loop-5": Object.freeze({
+    "midi-loop-1": { mode: "placed", width: 0.19, left: 0.22, top: 0.025, rotate: -1 },
+    "midi-loop-2": { mode: "placed", width: 0.2, left: 0.055, top: 0.055, rotate: 12 },
+    "midi-loop-3": { mode: "placed", width: 0.33, left: 0.025, top: 0.025, rotate: 2 },
+    "midi-loop-4": { mode: "placed", width: 0.22, left: 0.22, top: 0.025, rotate: 1 },
+    "midi-loop-5": { mode: "placed", width: 0.25, left: 0.025, top: 0.025, rotate: -1 }
+  })
+});
+
 export const VISUAL_LAYER_DEFINITIONS = Object.freeze([
   Object.freeze({
     id: "chord-background",
@@ -24,25 +62,55 @@ export const VISUAL_LAYER_DEFINITIONS = Object.freeze([
     domId: "result-visual",
     className: "result-visual-character",
     mappings: Object.freeze({
-      "midi-loop-1": { src: "./images/characters/melody-loop-1-r11.png", alt: "基本姿のTKSKbird", layout: { mode: "contain", scale: 0.78, x: 0.5, y: 0.51 } },
-      "midi-loop-2": { src: "./images/characters/melody-loop-2-r11.png", alt: "ストリート衣装で歌うTKSKbird", layout: { mode: "contain", scale: 0.84, x: 0.5, y: 0.52 } },
-      "midi-loop-3": { src: "./images/characters/melody-loop-3-r15.png", alt: "妖精衣装のTKSKbird", layout: { mode: "contain", scale: 0.82, x: 0.52, y: 0.51 } },
-      "midi-loop-4": { src: "./images/characters/melody-loop-4-r15.png", alt: "歌舞伎衣装のTKSKbird", layout: { mode: "contain", scale: 0.86, x: 0.5, y: 0.52 } },
-      "midi-loop-5": { src: "./images/characters/melody-loop-5-r15.png", alt: "パーティー衣装のTKSKbird", layout: { mode: "contain", scale: 0.9, x: 0.5, y: 0.52 } }
+      "midi-loop-1": { src: "./images/characters/melody-loop-1-r11.png", alt: "基本姿のTKSKbird", layout: { mode: "contain", scale: 0.73, x: 0.45, y: 0.59 } },
+      "midi-loop-2": { src: "./images/characters/melody-loop-2-r11.png", alt: "ストリート衣装で歌うTKSKbird", layout: { mode: "contain", scale: 0.79, x: 0.45, y: 0.6 } },
+      "midi-loop-3": { src: "./images/characters/melody-loop-3-r15.png", alt: "妖精衣装のTKSKbird", layout: { mode: "contain", scale: 0.77, x: 0.47, y: 0.59 } },
+      "midi-loop-4": { src: "./images/characters/melody-loop-4-r15.png", alt: "歌舞伎衣装のTKSKbird", layout: { mode: "contain", scale: 0.81, x: 0.45, y: 0.6 } },
+      "midi-loop-5": { src: "./images/characters/melody-loop-5-r15.png", alt: "パーティー衣装のTKSKbird", layout: { mode: "contain", scale: 0.85, x: 0.5, y: 0.6 } }
     })
   }),
   Object.freeze({
-    id: "bass-sticker",
+    id: "bass-greeting",
     track: "bass",
     zIndex: 20,
+    domId: "result-visual-greeting",
+    className: "result-visual-greeting",
+    mappings: Object.freeze({
+      "midi-loop-1": { src: "./images/greetings/birthday-lettering-01-blue-script.png", alt: "青い筆記体のHappy Birthday Dear Hina", layout: { mode: "placed", width: 0.64, left: 0.15, top: 0.62, rotate: 0 } },
+      "midi-loop-2": { src: "./images/greetings/birthday-lettering-02-cream-green.png", alt: "クリーム色と緑のHappy Birthday Dear Hina", layout: { mode: "placed", width: 0.64, left: 0.15, top: 0.62, rotate: 0 } },
+      "midi-loop-3": { src: "./images/greetings/birthday-lettering-03-orange-ribbon.png", alt: "オレンジ色のリボン型Happy Birthday Dear Hina", layout: { mode: "placed", width: 0.64, left: 0.15, top: 0.62, rotate: 0 } },
+      "midi-loop-4": { src: "./images/greetings/birthday-lettering-04-colorful-bubble.png", alt: "カラフルなHappy Birthday Dear Hina", layout: { mode: "placed", width: 0.64, left: 0.15, top: 0.62, rotate: 0 } },
+      "midi-loop-5": { src: "./images/greetings/birthday-lettering-05-parliament.png", alt: "オレンジ色と水色のHappy Birthday Dear Hina", layout: { mode: "placed", width: 0.64, left: 0.15, top: 0.62, rotate: 0 } }
+    })
+  }),
+  Object.freeze({
+    id: "drum-sticker",
+    track: "drum",
+    layoutTrack: "chord",
+    layouts: DRUM_STICKER_LAYOUTS_BY_CHORD,
+    zIndex: 30,
     domId: "result-visual-sticker",
     className: "result-visual-sticker",
     mappings: Object.freeze({
-      "midi-loop-1": { src: "./images/stickers/bass-loop-1-r21.png", alt: "GOOD VIBESステッカー", layout: { mode: "placed", width: 0.24, left: 0.05, top: 0.06, rotate: -7 } },
-      "midi-loop-2": { src: "./images/stickers/bass-loop-2-r21.png", alt: "HAVE A GOOD DAYステッカー", layout: { mode: "placed", width: 0.25, left: 0.7, top: 0.07, rotate: 6 } },
-      "midi-loop-3": { src: "./images/stickers/bass-loop-3-r21.png", alt: "POSITIVE ENERGYステッカー", layout: { mode: "placed", width: 0.38, left: 0.04, top: 0.05, rotate: -4 } },
-      "midi-loop-4": { src: "./images/stickers/bass-loop-4-r21.png", alt: "GOOD VIBES ONLYステッカー", layout: { mode: "placed", width: 0.27, left: 0.05, top: 0.68, rotate: -5 } },
-      "midi-loop-5": { src: "./images/stickers/bass-loop-5-r21.png", alt: "虹のステッカー", layout: { mode: "placed", width: 0.3, left: 0.66, top: 0.05, rotate: 5 } }
+      "midi-loop-1": { src: "./images/stickers/bass-loop-1-r21.png", alt: "GOOD VIBESステッカー" },
+      "midi-loop-2": { src: "./images/stickers/bass-loop-2-r21.png", alt: "HAVE A GOOD DAYステッカー" },
+      "midi-loop-3": { src: "./images/stickers/bass-loop-3-r21.png", alt: "POSITIVE ENERGYステッカー" },
+      "midi-loop-4": { src: "./images/stickers/bass-loop-4-r21.png", alt: "GOOD VIBES ONLYステッカー" },
+      "midi-loop-5": { src: "./images/stickers/bass-loop-5-r21.png", alt: "虹のステッカー" }
+    })
+  }),
+  Object.freeze({
+    id: "arp-corner-label",
+    track: "arp",
+    zIndex: 40,
+    domId: "result-visual-corner-label",
+    className: "result-visual-corner-label",
+    mappings: Object.freeze({
+      "midi-loop-1": { src: "./images/corner-labels/corner-label-01-mint.png", alt: "ミント色のコーナーラベル", layout: { mode: "placed", width: 0.34, left: 0.635, top: 0.025, rotate: 0 } },
+      "midi-loop-2": { src: "./images/corner-labels/corner-label-02-lavender.png", alt: "ラベンダー色のコーナーラベル", layout: { mode: "placed", width: 0.34, left: 0.635, top: 0.025, rotate: 0 } },
+      "midi-loop-3": { src: "./images/corner-labels/corner-label-03-blue.png", alt: "水色のコーナーラベル", layout: { mode: "placed", width: 0.34, left: 0.635, top: 0.025, rotate: 0 } },
+      "midi-loop-4": { src: "./images/corner-labels/corner-label-04-yellow.png", alt: "黄色のコーナーラベル", layout: { mode: "placed", width: 0.34, left: 0.635, top: 0.025, rotate: 0 } },
+      "midi-loop-5": { src: "./images/corner-labels/corner-label-05-pink.png", alt: "ピンク色のコーナーラベル", layout: { mode: "placed", width: 0.34, left: 0.635, top: 0.025, rotate: 0 } }
     })
   })
 ]);
@@ -53,6 +121,9 @@ export function resolveVisualLayers(trackPatterns, definitions = VISUAL_LAYER_DE
       const patternId = trackPatterns?.[definition.track] ?? DEFAULT_PATTERN_ID;
       const mapping = definition.mappings[patternId] ?? definition.mappings[DEFAULT_PATTERN_ID];
       if (!mapping) return null;
+      const layoutPatternId = trackPatterns?.[definition.layoutTrack] ?? DEFAULT_PATTERN_ID;
+      const layout = definition.layouts?.[layoutPatternId]?.[patternId] ?? mapping.layout;
+      if (!layout) return null;
       return {
         id: definition.id,
         track: definition.track,
@@ -62,7 +133,8 @@ export function resolveVisualLayers(trackPatterns, definitions = VISUAL_LAYER_DE
         className: definition.className ?? "",
         decorative: Boolean(definition.decorative),
         opacity: mapping.opacity ?? 1,
-        ...mapping
+        ...mapping,
+        layout
       };
     })
     .filter(Boolean)
